@@ -115,8 +115,8 @@ a {
 }
 
 .content img {
-  width: 90px;
-  height: 90px;
+  width: 150px;
+  height: 150px;
   border-radius: 100px;
   overflow: hidden;
   object-fit: cover;
@@ -251,10 +251,10 @@ body {
   position: absolute;
   left: 50%;
   top: 30px;
-  margin-left: -50px;
+  margin-left: -54px;
   z-index: 5;
-  width: 100px;
-  height: 100px;
+  width: 110px;
+  height: 110px;
   border-radius: 50%;
   overflow: hidden;
   background: #ccc;
@@ -269,7 +269,7 @@ body {
   -ms-transform: translate(-50%, -50%);
   -o-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  width: 100px;
+  width: 110px;
   height: auto;
 }
 .card-one h3 {
