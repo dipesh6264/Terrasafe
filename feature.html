@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake bot</title>
+    <style>
+        body {
+            background-color: black;
+            text-align: center;
+            color: #fff;
+            padding-top: 5vh;
+            height: 100vh;
+            overflow: auto;
+            font-size: medium;
+        }
+
+        * {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .features {
+            width: 35vw;
+        }
+
+       
+
+        .features-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50vw;
+            align-content: center;
+            margin-left: 20vw;
+            margin-top: 10vh;
+            color:yellow;
+            font-weight: 300;
+            
+        }
+
+        .feature {
+            margin: 0;
+            padding: 5vh;
+            position: relative;
+            z-index: 2;
+            border: 1px solid white;
+            font-size: 3vh;
+            transition: background-color 0.3s;
+            color: yellow;
+        }
+
+        .feature:hover {
+            background-color: green;
+        }
+
+        .connector {
+            flex: 1;
+            height: 2px;
+            background-color: white;
+            position: relative;
+            z-index: 1;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .vertical-connector {
+            position: absolute;
+            background-color: white;
+            width: 2px;
+            height: 0;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            transition: height 0.3s;
+        }
+
+        .hovered-feature {
+            position: relative;
+            z-index: 2;
+            margin-top: 5vh;
+            border: 1px solid white;
+            transition: background-color 0.3s;
+        }
+
+        .hovered-feature:hover {
+            background-color: green;
+        }
+
+        .hovered-feature .vertical-connector {
+            height: calc(100% - 5vh);
+        }
+
+        .desc {
+            display: flex;
+            margin-top: 5vh;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: center;
+            width: 50vw;
+            margin: 0 25vw;
+            margin-top: 0;
+        }
+
+        .vconnector {
+            height: 8.5vh;
+            /* width: 1px; */
+            border: 2px solid white;
+            
+
+            margin-top: 0;
+            /* display: flex; */
+            margin-left: 13vw;
+            margin-bottom: 0;
+        }
+        .vconnectr {
+            height: 8.5vh;
+            /* width: 1px; */
+            border: 2px solid white;
+            
+            margin-bottom: 0;
+            margin-top: 0;
+            /* display: flex; */
+            /* margin-left: 6vw; */
+        }
+
+        .vcs {
+            display: flex;
+            margin-top: 0;
+            margin-left: 29vw;
+
+
+        }
+        
+        .card {
+            flex: 1;
+            width: 15vw;
+            padding: 20px;
+            margin-top: 0;
+            background-color: black;
+            text-align: center;
+            margin-right: 10px;
+            border: 2px solid white;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .card h3 {
+            margin-top: 10px;
+        }
+        #bo{
+            display: flex;
+        }
+        .card p {
+            margin-top: 5px;
+        }
+        .card:hover{
+            background-color: purple;
+        }
+        .im{
+            margin-left: 5vw;
+            width: 0vw;
+            margin-top: 10vh;
+        }
+        #horizonta{
+            width:5vw;
+            border: 2px solid red;
+            /* height: 1px */
+        }
+    </style>
+    <script>
+        var TxtType = function(el, toRotate, period) {
+            this.toRotate = toRotate;
+            this.el = el;
+            this.loopNum = 0;
+            this.period = parseInt(period, 10) || 2000;
+            this.txt = '';
+            this.tick();
+            this.isDeleting = false;
+        };
+
+        TxtType.prototype.tick = function() {
+            var i = this.loopNum % this.toRotate.length;
+            var fullTxt = this.toRotate[i];
+
+            if (this.isDeleting) {
+                this.txt = fullTxt.substring(0, this.txt.length - 1);
+            } else {
+                this.txt = fullTxt.substring(0, this.txt.length + 1);
+            }
+
+            this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
+
+            var that = this;
+            var delta = 200 - Math.random() * 100;
+
+            if (this.isDeleting) {
+                delta /= 2;
+            }
+
+            if (!this.isDeleting && this.txt === fullTxt) {
+                delta = this.period;
+                this.isDeleting = true;
+            } else if (this.isDeleting && this.txt === '') {
+                this.isDeleting = false;
+                this.loopNum++;
+                delta = 500;
+            }
+
+            setTimeout(function() {
+                that.tick();
+            }, delta);
+        };
+
+        window.onload = function() {
+            var elements = document.getElementsByClassName('typewrite');
+            for (var i = 0; i < elements.length; i++) {
+                var toRotate = elements[i].getAttribute('data-type');
+                var period = elements[i].getAttribute('data-period');
+                if (toRotate) {
+                    new TxtType(elements[i], JSON.parse(toRotate), period);
+                }
+            }
+            // INJECT CSS
+            var css = document.createElement("style");
+            css.type = "text/css";
+            css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #fff}";
+            document.body.appendChild(css);
+
+            var features = document.getElementsByClassName('feature');
+            for (var i = 0; i < features.length; i++) {
+                features[i].addEventListener('mouseover', showHoveredFeature);
+                features[i].addEventListener('mouseout', hideHoveredFeature);
+            }
+
+        };
+    </script>
+</head>
+<body>
+    <div class="typewriter">
+        <h1>
+            <a href="" class="typewrite" data-period="2000" data-type='[ "We are Terrasafe."]'>
+                <span class="wrap"></span>
+            </a>
+        </h1>
+        <!-- <hr> -->
+    </div>
+    <div id="body">
+        <div id="bo">
+        <div class="im">
+            <img src="Normal engine.jpeg" alt="" size="cover">
+            <div class="connector"></div>
+            </div>
+            
+            <!-- <div id="horizonta"></div> -->
+        
+        <div class="features-container">
+           
+            <div class="feature">
+                Speed
+            </div>
+            <div class="connector"></div>
+            <div class="vertical-connector"></div> <!-- Vertical connector -->
+            <div class="feature">
+                Mobility
+            </div>
+            <div class="connector"></div>
+            <div class="vertical-connector"></div> <!-- Vertical connector -->
+            <div class="feature">
+                Flexibility
+            </div>
+            <div class="connector"></div>
+            <div class="vertical-connector"></div> <!-- Vertical connector -->
+            <div class="feature">
+                Robustness
+            </div>
+        </div>
+        <div class="im">
+            <img src="Reverse engine.jpeg" alt="" size="cover">
+            <div class="connector"></div>
+            </div>
+    </div>
+        <div class="vcs">
+                <div class='vconnectr'></div>
+                <div class='vconnector'></div>
+                <div class='vconnector'></div>
+                <div class='vconnector'></div>
+            </div>
+        <div class="card-container">
+            
+           
+            <div class="card">
+                <h3>Speed</h3>
+                <p>Description of Card 1 Lorem ipsum, dolor sit amet consectetur adipisicing elit. Excepturi, sint? Maiores modi, debitis molestias quos, repellat amet dolorum eius ea illo sapiente voluptate nihil laboriosam mollitia nostrum! Accusamus, fugit fuga? Animi ullam excepturi perspiciatis.</p>
+            </div>
+            <div class="card">
+                <h3>Mobility</h3>
+                <p>Description of Card 2 Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo ipsa excepturi autem iure odit hic itaque minus dicta! Quaerat doloremque consequuntur possimus, reiciendis at maxime animi rem, optio omnis molestias nisi porro, laudantium vero?</p>
+            </div>
+            <div class="card">
+                <h3>Flexibility</h3>
+                <p>Description of Card 3 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla quaerat porro, sequi quia repellendus perspiciatis nostrum, pariatur modi repellat consequatur harum alias ab! Minima quis veniam in nisi necessitatibus voluptates eius quasi sapiente ullam?</p>
+            </div>
+            <div class="card">
+                <h3>Robustness</h3>
+                <p>Description of Card 4 Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eligendi blanditiis, ipsa enim distinctio quos iusto eius delectus. Facere similique assumenda deleniti ex. Adipisci minima, animi illo accusantium eligendi repudiandae iusto quod qui. Necessitatibus, architecto.</p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
